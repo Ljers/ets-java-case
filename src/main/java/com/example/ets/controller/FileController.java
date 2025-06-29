@@ -53,26 +53,18 @@ public class FileController {
         return fileService.getAllFiles();
     }
 
-    @Operation(summary = "Download file content by id")
     @GetMapping("/{id}/download")
     public ResponseEntity<byte[]> downloadFile(@PathVariable Long id) throws IOException {
+        byte[] content = fileService.downloadFileContent(id);
         FileEntity entity = fileService.getFileById(id);
-        Path path = Paths.get(entity.getPath());
-        byte[] content = Files.readAllBytes(path);
-
-        MediaType mediaType = switch (entity.getExtension()) {
-            case "png", "jpeg", "jpg" -> MediaType.IMAGE_JPEG;
-            case "pdf" -> MediaType.APPLICATION_PDF;
-            case "docx" -> MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-            case "xlsx" -> MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-            default -> MediaType.APPLICATION_OCTET_STREAM;
-        };
 
         return ResponseEntity.ok()
-                .contentType(mediaType)
+                .contentType(fileService.determineMediaType(entity.getExtension()))
                 .header("Content-Disposition", "attachment; filename=\"" + entity.getFileName() + "\"")
                 .body(content);
     }
+
+
 
     @Operation(summary = "Delete file by id")
     @DeleteMapping("/{id}")

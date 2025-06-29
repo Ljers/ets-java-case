@@ -5,6 +5,16 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "files")
 public class FileEntity {
+    public FileEntity() {
+
+    }
+    public FileEntity(String fileName, String storedFileName, String extension, Long size, String path) {
+        this.fileName = fileName;
+        this.storedFileName = storedFileName;
+        this.extension = extension;
+        this.size = size;
+        this.path = path;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +34,6 @@ public class FileEntity {
 
     @Column(name = "path")
     private String path;
-
-    // Getter ve Setter'lar
 
     public Long getId() {
         return id;
