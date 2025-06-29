@@ -4,33 +4,23 @@ import com.example.ets.entity.FileEntity;
 import com.example.ets.service.FileService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/api/files")
 @Tag(name = "Files API", description = "File upload, download, update, delete operations")
+@SecurityRequirement(name = "bearerAuth")
 public class FileController {
 
     @Autowired
@@ -53,6 +43,7 @@ public class FileController {
         return fileService.getAllFiles();
     }
 
+    @Operation(summary = "Download file by ID")
     @GetMapping("/{id}/download")
     public ResponseEntity<byte[]> downloadFile(@PathVariable Long id) throws IOException {
         byte[] content = fileService.downloadFileContent(id);
@@ -64,9 +55,7 @@ public class FileController {
                 .body(content);
     }
 
-
-
-    @Operation(summary = "Delete file by id")
+    @Operation(summary = "Delete file by ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteFile(@PathVariable Long id) {
         try {
@@ -77,7 +66,7 @@ public class FileController {
         }
     }
 
-    @Operation(summary = "Update file by id")
+    @Operation(summary = "Update file by ID")
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateFile(@PathVariable Long id, @RequestPart("file") MultipartFile file) {
         try {

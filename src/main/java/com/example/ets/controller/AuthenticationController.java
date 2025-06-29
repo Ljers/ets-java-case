@@ -2,6 +2,10 @@ package com.example.ets.controller;
 
 import com.example.ets.security.JwtUtil;
 import com.example.ets.security.CustomUserDetailsService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication", description = "Login operations for JWT authentication")
 public class AuthenticationController {
 
     @Autowired
@@ -22,10 +27,10 @@ public class AuthenticationController {
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
-    record AuthRequest(String username, String password) {}  // Java 16+ record, yoksa standart DTO yaz
+    public record AuthRequest(String username, String password) {}
+    public record AuthResponse(String token) {}
 
-    record AuthResponse(String token) {}
-
+    @Operation(summary = "Login", description = "Authenticate user and return JWT token")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
         try {

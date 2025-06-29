@@ -1,11 +1,13 @@
 package com.example.ets.enums;
 
+import lombok.Getter;
 import org.springframework.http.MediaType;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
+import java.util.List;
 
+@Getter
 public enum FileType {
     PNG("png", MediaType.IMAGE_JPEG),
     JPEG("jpeg", MediaType.IMAGE_JPEG),
@@ -20,14 +22,6 @@ public enum FileType {
     FileType(String extension, MediaType mediaType) {
         this.extension = extension;
         this.mediaType = mediaType;
-    }
-
-    public String getExtension() {
-        return extension;
-    }
-
-    public MediaType getMediaType() {
-        return mediaType;
     }
 
     public static MediaType fromExtension(String ext) {
