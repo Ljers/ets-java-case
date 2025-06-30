@@ -59,3 +59,14 @@ Access the Swagger documentation and test the APIs:
 http://localhost:8080/swagger-ui/index.html
 
 Click Authorize and enter your token to access protected endpoints.
+
+## 🧪 Postman API Collection
+
+You can test all endpoints with the provided Postman collection:
+
+👉 [`postman/ets-api.postman_collection.json`]
+
+1. Login using `/api/auth/login` to get a JWT token.
+2. Set `Bearer Token` in Postman headers.
+3. Use endpoints like `/api/files/upload`, `/api/files/{id}` etc.
+
